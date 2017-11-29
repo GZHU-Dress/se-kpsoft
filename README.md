@@ -1,2 +1,14 @@
-# se-kpsoft
-se homework for kpsoft
+# SE-kpsoft
+
+此项目由课内SE实验课而起，接手kpsoft的中间件开发
+希望我们能够顺利完成
+（令：mod强哥赛高）
+（二令：期末前要完成文档提交。代码可以没写完，文档要写完）
+
+---
+工程结构：
+|文件夹|说明|
+|-|-|
+|[Protocol](./Protocol/)| 为协议解释器封装器+加密步骤|
+|[SEdoc](./SEdoc/) |为课内要求的文档格式|
+|[test](./test/)|测试方法|
