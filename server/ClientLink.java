@@ -3,7 +3,13 @@ import java.net.*;
 import java.security.*;
 import sun.misc.*;
 public class ClientLink extends Thread{
+	/**
+	*socket为tcp连接成功的socket
+	*/
 	private Socket socket;
+	/**
+	*检测key并把key提取后加上规定字符串
+	*/
 	private String check(String line){
 		String x=new String("Sec-WebSocket-Key: ");
 		if(line.length()<x.length())
@@ -14,12 +20,21 @@ public class ClientLink extends Thread{
 		}
 		return line.substring(x.length())+"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 	}
+	/**
+	*对字符串进行base64加密
+	*/
 	private String getBase64(byte[] hash){
 		return (new BASE64Encoder()).encode(hash);
 	}
+	/**
+	*构造函数初始化socket
+	*/
 	public ClientLink(Socket s){
 		socket=s;
 	}
+	/**
+	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
+	*/
 	public void run(){
 		try{
 			BufferedReader br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
