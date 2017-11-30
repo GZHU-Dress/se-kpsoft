@@ -3,15 +3,16 @@ public class Alzdata{
 		fd.setpllength(length);
 		byte[] data;
 		data=new byte[length];
+		byte[] maskdata=new byte[4];
 		if(fd.getmask()){
-			int maskdata=0;
-			for(int i=st;i<st+4;i++)
-				maskdata=maskdata<<8|by[i];
-			fd.setmaskdata(maskdata);
+			System.arraycopy(by,st,maskdata,0,4);
 			System.arraycopy(by,st+4,data,0,length);
 		}
 		else
 			System.arraycopy(by,st,data,0,length);
+		for(int i=0;i<length;i++){
+			data[i]=(byte)(data[i]^maskdata[i%4]);
+		}
 		fd.setpayloaddata(new String(data));
 	}
 	public Framedata analizedata(byte[] by){//by数据包　bylength数据包长度 解析数据帧功能
