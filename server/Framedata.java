@@ -4,7 +4,6 @@ public class Framedata{
 	private boolean mask;//是否经过掩码处理
 	private int pllength;//数据长度
 	private String payloaddata;//应用层数据
-	private int maskdata;//掩码
 	public Framedata(){
 		fin=false;
 		frametype=pllength=0;
@@ -23,9 +22,6 @@ public class Framedata{
 	public void setpllength(int pllen){
 		pllength=pllen;
 	}
-	public void setmaskdata(int md){
-		maskdata=0;
-	}
 	public void setpayloaddata(String pl){
 		payloaddata=pl;
 	}
@@ -41,11 +37,15 @@ public class Framedata{
 	public int getpllength(){
 		return pllength;
 	}
-	public int getmaskdata(){
-		return maskdata;
-	}
 	public String getpayloaddata(){
 		return payloaddata;
+	}
+	public void output(){
+		System.out.println("fin="+fin);
+		System.out.println("frametype="+frametype);
+		System.out.println("mask="+mask);
+		System.out.println("pllength="+pllength);
+		System.out.println("payloaddata="+payloaddata);
 	}
 }
 

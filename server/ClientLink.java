@@ -2,11 +2,23 @@ import java.io.*;
 import java.net.*;
 import java.security.*;
 import sun.misc.*;
+import java.util.Queue;
+import java.util.LinkedList;
 public class ClientLink extends Thread{
 	/**
 	*socket为tcp连接成功的socket
 	*/
 	private Socket socket;
+	/**
+	*应用层数据队列
+	*/
+	private Queue<String> q; 
+	/**
+	*初始化队列
+	*/
+	private ClientLink(){
+		q=new LinkedList<String>();
+	}
 	/**
 	*检测key并把key提取后加上规定字符串
 	*/
@@ -30,7 +42,29 @@ public class ClientLink extends Thread{
 	*构造函数初始化socket
 	*/
 	public ClientLink(Socket s){
+		q=new LinkedList<String>();
 		socket=s;
+	}
+	/**
+	*开始读取数据，并把信息存到消息队列里
+	*/
+	public void onread()throws IOException{
+		InputStream is=socket.getInputStream();
+		int length=-1;
+		byte[] by=new byte[205];
+		while(true){
+			length=is.read(by);
+			System.out.println(length);
+			Framedata fd=(new Alzdata()).analizedata(by);
+			fd.output();
+			q.offer(fd.getpayloaddata());
+		}
+	}
+	/**
+	*从消息队列中返回信息
+	*/
+	public String getmessage(){
+		return q.poll();
 	}
 	/**
 	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
@@ -51,14 +85,13 @@ public class ClientLink extends Thread{
 				}
 			}
 			System.out.println(res);
-			//PrintStream pr=new PrintStream(socket.getOutputStream());
-			//pr.println("111111");
 			BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             bw.write("HTTP/1.1 101 Web Socket Protocol Handshake\r\n");
             bw.write("Upgrade: websocket\r\n");
             bw.write("Connection: Upgrade\r\n");
             bw.write("Sec-WebSocket-Accept: "+res+"\r\n\r\n");
 			bw.flush();
+			onread();
 		}
 		catch(UnsupportedEncodingException e){
 			e.printStackTrace();
