@@ -51,7 +51,7 @@ public class ClientLink extends Thread{
 	public void onread()throws IOException{
 		InputStream is=socket.getInputStream();
 		int length=-1;
-		byte[] by=new byte[205];
+		byte[] by=new byte[10005];
 		while(true){
 			length=is.read(by);
 			System.out.println(length);
@@ -71,6 +71,12 @@ public class ClientLink extends Thread{
 	*/
 	public boolean empty(){
 		return q.element()==null;
+	}
+	/**
+	*发送信息给客户端,message为服务端封装好的字节信息
+	*/
+	public void send(byte[] message){
+		
 	}
 	/**
 	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验

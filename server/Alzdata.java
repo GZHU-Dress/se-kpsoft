@@ -15,7 +15,10 @@ public class Alzdata{
 		}
 		fd.setpayloaddata(new String(data));
 	}
-	public Framedata analizedata(byte[] by){//by数据包　bylength数据包长度 解析数据帧功能
+	/**
+	*by是数据包，此方法为解析数据帧的作用
+	*/
+	public Framedata analizedata(byte[] by){
 		Framedata fd=new Framedata();	
 		fd.setfin((by[0]&0x80)==0x80);
 		fd.setframetype(by[0]&0x0F);

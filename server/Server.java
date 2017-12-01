@@ -8,6 +8,31 @@ public class Server{
 	private int PORT;
 	private ClientLink cl;
 	/**
+	*服务器封装数据,返回封装后的数据
+	*/
+	private byte[] packdata(String message){
+		byte[] content=null;
+		byte[] temp=message.getBytes();
+		if(message.length()<126){
+			content=new byte[message.length()+2];
+			content[0]=(byte)(0x81);
+			content[1]=(byte)message.length();
+			System.arraycopy(temp,0,content,2,message.length());
+		}
+		else if(message.length()<0xFFFF){
+			content=new byte[message.length()+4];
+			content[0]=(byte)(0x81);
+			content[1]=(byte)126;
+			content[3]=(byte)(message.length()&0xFF);
+			content[2]=(byte)(message.length()>>8&0xFF);
+			System.arraycopy(temp,0,content,4,message.length());
+		}
+		else{
+			//暂时不做处理
+		}
+		return content;
+	}
+	/**
 	*启动服务器即创建Server对象，参数p为创建时候要监听的端口　
 	*/
 	public Server(int p){
@@ -37,6 +62,13 @@ public class Server{
 	*/
 	public boolean empty(){
 		return cl.empty();
+	}
+	/**
+	*将要发送的信息封装，再发送给客户端数据
+	*/
+	public void send(String message){
+		byte[] ms=packdata(message);
+		cl.send(ms);	
 	}
 	/**
 	*开启接收客户端数据

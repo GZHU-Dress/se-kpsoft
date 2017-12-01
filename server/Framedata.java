@@ -1,9 +1,24 @@
 public class Framedata{
-	private boolean fin;//表示是否为最后一帧
-	private int frametype;//帧的数据类型
-	private boolean mask;//是否经过掩码处理
-	private int pllength;//数据长度
-	private String payloaddata;//应用层数据
+	/**
+	*是否为最后一帧
+	*/
+	private boolean fin;
+	/**
+	*帧的数据类型
+	*/
+	private int frametype;
+	/**
+	*是否经过掩码处理
+	*/
+	private boolean mask;
+	/**
+	*数据长度
+	*/
+	private int pllength;
+	/**
+	*应用层数据
+	*/
+	private String payloaddata;
 	public Framedata(){
 		fin=false;
 		frametype=pllength=0;
