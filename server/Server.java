@@ -27,10 +27,16 @@ public class Server{
 		}
 	}
 	/**
-	*获取客户端消息队列里的第一条信息，若不存在返回null
+	*获取客户端消息队列里的第一条消息
 	*/
 	public String getmessage(){
 		return cl.getmessage();
+	}
+	/**
+	*判断消息队列是否为空
+	*/
+	public boolean empty(){
+		return cl.empty();
 	}
 	/**
 	*开启接收客户端数据

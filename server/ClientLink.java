@@ -67,6 +67,12 @@ public class ClientLink extends Thread{
 		return q.poll();
 	}
 	/**
+	*判断消息队列是否为空
+	*/
+	public boolean empty(){
+		return q.element()==null;
+	}
+	/**
 	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
 	*/
 	public void run(){
