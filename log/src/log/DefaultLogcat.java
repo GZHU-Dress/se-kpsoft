@@ -1,3 +1,5 @@
+package log;
+
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;

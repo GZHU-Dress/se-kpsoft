@@ -1,3 +1,5 @@
+package log;
+
 import java.io.File;
 
 /**
@@ -43,7 +45,7 @@ public class Core {
      * 执行此方法进行初始化
      */
     public static synchronized void install() throws InstallException {
-        if (installed)throw new InstallException("Core had been installed");
+        if (installed)throw new InstallException("log.Core had been installed");
         Log.addLogcat(defaultLogcat);
         Log.d("default logcat has been installed");
 
@@ -52,10 +54,10 @@ public class Core {
         //IOrouter =new IORouter(defaultLogcat.outputStream);
 
         installed = true;
-        Log.d("Core has been installed");
+        Log.d("log.Core has been installed");
     }
     public static void setPrintLog(File filepath)throws InstallException {
-        if(!installed)throw new InstallException("Set PrintLog failed, Core had not been installed");
+        if(!installed)throw new InstallException("Set PrintLog failed, log.Core had not been installed");
         Log.addLogcat(new PrintLogcat(filepath));
         Log.d("print logcat has been installed");
     }

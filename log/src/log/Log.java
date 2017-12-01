@@ -1,3 +1,5 @@
+package log;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
@@ -183,7 +185,7 @@ public final class Log {
             }
         }
         LogInside.log.logcats.add(logcat);
-        Log.d("add new Logcat : "+logcat.toString());
+        Log.d("add new log.Logcat : "+logcat.toString());
     }
 
 
