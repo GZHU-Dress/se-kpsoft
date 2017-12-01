@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="log">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../log/out/artifacts/log_jar/log.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../log/log.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
