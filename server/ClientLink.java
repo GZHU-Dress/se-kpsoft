@@ -75,8 +75,8 @@ public class ClientLink extends Thread{
 	/**
 	*发送信息给客户端,message为服务端封装好的字节信息
 	*/
-	public void send(byte[] message){
-		
+	public void send(byte[] message) throws IOException{
+		(socket.getOutputStream()).write(message);				
 	}
 	/**
 	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
