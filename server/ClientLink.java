@@ -57,8 +57,13 @@ public class ClientLink extends Thread{
 			System.out.println(length);
 			Framedata fd=(new Alzdata()).analizedata(by);
 			fd.output();
+			if(fd.getframetype()==8)
+				break;
 			q.offer(fd.getpayloaddata());
 		}
+		while(!empty())
+			q.poll();
+		send(by);			
 	}
 	/**
 	*从消息队列中返回信息
@@ -70,7 +75,7 @@ public class ClientLink extends Thread{
 	*判断消息队列是否为空
 	*/
 	public boolean empty(){
-		return q.element()==null;
+		return q.peek()==null;
 	}
 	/**
 	*发送信息给客户端,message为服务端封装好的字节信息
