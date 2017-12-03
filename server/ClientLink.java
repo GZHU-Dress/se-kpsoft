@@ -43,7 +43,6 @@ public class ClientLink{
 	*构造函数初始化socket
 	*/
 	public ClientLink(Socket s){
-		q=new LinkedList<String>();
 		socket=s;
 	}
 	/**
@@ -55,24 +54,52 @@ public class ClientLink{
 	/**
 	*开始读取数据，并把信息存到消息队列里
 	*/
-	public void onread()throws IOException{
-		InputStream is=socket.getInputStream();
-		int length=-1;
-		byte[] by=new byte[10005];
-		while(true){
-			length=is.read(by);
-			System.out.println(length);
-			Framedata fd=(new Alzdata()).analizedata(by);
-			fd.output();
-			if(fd.getframetype()==8)
-				break;
-			q.offer(fd.getpayloaddata());
+	public void onread()throws WebsocketException{
+		try{
+			InputStream is=socket.getInputStream();
+			int length=-1;
+			byte[] by=new byte[10005];
+			while(true){
+				if(socket==null)
+					return;
+				length=is.read(by);
+				System.out.println(length);
+				Framedata fd=(new Alzdata()).analizedata(by);
+				fd.output();
+				if(fd.getframetype()==8)
+					break;
+				q.offer(fd.getpayloaddata());
+			}
+			send(by);
+			socket.close();
+			socket=null;
 		}
-		while(!empty())
-			q.poll();
-		send(by);
-		socket.close();
-		socket=null;
+		catch(IOException e){
+			throw new WebsocketException("can not open socket inputstream");
+		}
+		catch(NullPointerException e1){
+			throw new WebsocketException("socket is null");
+		}
+	}
+	/**
+	*关闭连接
+	*/
+	public void onclose() throws WebsocketException{
+		try{
+			byte[] by=new byte[6];
+			by[0]=-120;
+			by[1]=-128;
+			by[2]=-84;
+			by[3]=5;
+			by[4]=49;
+			by[5]=79;
+			send(by);
+			socket.close();
+			socket=null;
+		}
+		catch(IOException e){
+			throw new WebsocketException("socket close error");
+		}	
 	}
 	/**
 	*从消息队列中返回信息
@@ -89,13 +116,21 @@ public class ClientLink{
 	/**
 	*发送信息给客户端,message为服务端封装好的字节信息
 	*/
-	public void send(byte[] message) throws IOException{
-		(socket.getOutputStream()).write(message);				
+	public void send(byte[] message) throws WebsocketException{
+		try{
+			(socket.getOutputStream()).write(message);
+		}
+		catch(IOException e){
+			throw new WebsocketException("can not open socket outputstream");
+		}				
+		catch(NullPointerException e1){
+			throw new WebsocketException("socket is null");
+		}
 	}
 	/**
 	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
 	*/
-	public void run(){
+	public void run() throws WebsocketException{
 		try{
 			BufferedReader br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String line=null;
@@ -119,14 +154,14 @@ public class ClientLink{
 			bw.flush();
 			onread();
 		}
-		catch(UnsupportedEncodingException e){
-			e.printStackTrace();
+		catch(UnsupportedEncodingException e1){
+			throw new WebsocketException("encoding error");
 		}
-		catch(IOException e){
-			e.printStackTrace();
+		catch(IOException e2){
+			throw new WebsocketException("open socket inputstream error");
 		}
-		catch(NoSuchAlgorithmException e){
-			e.printStackTrace();
+		catch(NoSuchAlgorithmException e3){
+			throw new WebsocketException("no such algorighm");
 		}
 	}
 }

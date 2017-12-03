@@ -30,7 +30,10 @@ public class Server extends Thread{
 			}
 		}
 		catch(IOException e){
-			e.printStackTrace();
+			return;
+		}
+		catch(WebsocketException e){
+			return;
 		}
 	}
 	/**
@@ -48,9 +51,15 @@ public class Server extends Thread{
 	/**
 	*将要发送的信息封装，再发送给客户端数据
 	*/
-	public void send(String message) throws IOException{
+	public void send(String message) throws WebsocketException{
 		byte[] ms=Alzdata.packdata(message);
-		cl.send(ms);	
+		cl.send(ms);
+	}
+	/**
+	*关闭socket当前socket连接
+	*/
+	public void close() throws WebsocketException{
+		cl.onclose();
 	}
 	/**
 	*开启接收客户端数据
