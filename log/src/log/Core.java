@@ -13,6 +13,8 @@ public class Core {
      */
     private static boolean installed=false;
 
+    public static final long coreStartTime = System.currentTimeMillis();
+    public static final long coreStartTimeNano = System.nanoTime();
     public static boolean isInstalled() {
         return installed;
     }
