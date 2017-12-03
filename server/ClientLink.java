@@ -4,7 +4,7 @@ import java.security.*;
 import sun.misc.*;
 import java.util.Queue;
 import java.util.LinkedList;
-public class ClientLink extends Thread{
+public class ClientLink{
 	/**
 	*socket为tcp连接成功的socket
 	*/
@@ -16,8 +16,9 @@ public class ClientLink extends Thread{
 	/**
 	*初始化队列
 	*/
-	private ClientLink(){
+	public ClientLink(){
 		q=new LinkedList<String>();
+		socket=null;
 	}
 	/**
 	*检测key并把key提取后加上规定字符串
@@ -46,6 +47,12 @@ public class ClientLink extends Thread{
 		socket=s;
 	}
 	/**
+	*获取socket
+	*/
+	public Socket getsocket(){
+		return socket;
+	}
+	/**
 	*开始读取数据，并把信息存到消息队列里
 	*/
 	public void onread()throws IOException{
@@ -63,7 +70,9 @@ public class ClientLink extends Thread{
 		}
 		while(!empty())
 			q.poll();
-		send(by);			
+		send(by);
+		socket.close();
+		socket=null;
 	}
 	/**
 	*从消息队列中返回信息
