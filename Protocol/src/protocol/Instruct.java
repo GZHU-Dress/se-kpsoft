@@ -1,5 +1,7 @@
 package protocol;
 
+import java.util.Arrays;
+
 /**
  * 该类为解封装协议后获得到的可读取信息
  * 包含了信息类型、指明设备、时间、一系列的指令和数据
@@ -94,5 +96,17 @@ public class Instruct {
 
     public String[] getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return "Instruct{" +
+                "header_msgType='" + header_msgType + '\'' +
+                ", device_type='" + device_type + '\'' +
+                ", device_timeStamp=" + device_timeStamp +
+                ", device_timeOffset=" + device_timeOffset +
+                ", instruction=" + Arrays.toString(instruction) +
+                ", data=" + Arrays.toString(data) +
+                '}';
     }
 }

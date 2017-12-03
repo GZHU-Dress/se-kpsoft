@@ -3,7 +3,6 @@ package protocol;
 public class KPprotocolEncoder{
 
     private EncoderImpl encoder;
-    private ProtocolStruct  protocolStruct;
 
     public final static String splitSignal=";";
     public final static String encoderVersion ="0.1";
@@ -32,7 +31,8 @@ public class KPprotocolEncoder{
                 ));
     }
 
-    public Instruct decode(ProtocolStruct protocolStruct)throws EncoderException{
+    public Instruct decode(String msg)throws EncoderException{
+        ProtocolStruct protocolStruct=encoder.decode(msg);
         String[] head=protocolStruct.getHeader().split(splitSignal);
         if(head.length!=2)
             throw new EncoderException("the header line is not in law",protocolStruct);
@@ -57,8 +57,7 @@ public class KPprotocolEncoder{
         }
     }
 
-
-
-
-
+    public KPprotocolEncoder() {
+        this.encoder =new EncoderImpl();
+    }
 }
