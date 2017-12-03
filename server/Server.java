@@ -66,7 +66,7 @@ public class Server{
 	/**
 	*将要发送的信息封装，再发送给客户端数据
 	*/
-	public void send(String message){
+	public void send(String message) throws IOException{
 		byte[] ms=packdata(message);
 		cl.send(ms);	
 	}
