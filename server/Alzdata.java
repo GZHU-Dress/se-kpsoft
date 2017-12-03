@@ -1,4 +1,29 @@
 public class Alzdata{
+	/**
+	*服务器封装数据,返回封装后的数据
+	*/
+	public static byte[] packdata(String message){
+	    byte[] content=null;
+	    byte[] temp=message.getBytes();
+	    if(message.length()<126){
+	        content=new byte[message.length()+2];
+	        content[0]=(byte)(0x81);
+	        content[1]=(byte)message.length();
+	        System.arraycopy(temp,0,content,2,message.length());
+	    }
+	    else if(message.length()<0xFFFF){
+	        content=new byte[message.length()+4];
+	        content[0]=(byte)(0x81);
+	        content[1]=(byte)126;
+	        content[3]=(byte)(message.length()&0xFF);
+	        content[2]=(byte)(message.length()>>8&0xFF);
+	        System.arraycopy(temp,0,content,4,message.length());
+	    }
+	    else{
+	        //暂时不做处理	
+	    }
+	    return content;
+	}
 	private void solve(byte[] by,Framedata fd,int st,int length){
 		fd.setpllength(length);
 		byte[] data;
