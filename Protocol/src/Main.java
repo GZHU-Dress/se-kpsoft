@@ -12,7 +12,7 @@ public class Main {
         Core.install();
         Core.setPrintLog(PrintLogcat.defaultFilepath);
         Core.getDefaultLogcat().setLevelFilter(Log.Level.Info);
-        AbstractEncoder abstractEncoder =new KPprotocolEncoder();
+        EncoderImpl encoderImpl =new KPprotocolEncoder();
         ProtocolStruct[] tester=new ProtocolStruct[]{
 //                new ProtocolStruct("0.1 ACK","BLT","",new String[]{"ison=\"true\"","canconnect=\"\""}),
 //                new ProtocolStruct("0.1 ACK","BLT","ison=isOn",new String[]{}),
@@ -24,8 +24,8 @@ public class Main {
         String[] testString =new String[tester.length];
         for (int i = 0; i < tester.length; i++) {
             Log.i(tester[i].toString());
-            testString[i]=abstractEncoder.codec(tester[i]);
-            Log.i(abstractEncoder.encode(testString[i]).toString());
+            testString[i]= encoderImpl.encode(tester[i]);
+            Log.i(encoderImpl.decode(testString[i]).toString());
 
         }
 

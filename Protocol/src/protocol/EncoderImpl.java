@@ -13,17 +13,25 @@ import java.util.LinkedList;
  *
  * Created by zyvis on 2017/11/29.
  */
-public abstract class AbstractEncoder implements Encoder{
-
+public class EncoderImpl implements Encoder{
+    /**
+     *  编码器
+     *  完成对协议体的编码，会调用结构体本身的方法进行转义
+     *  剩下的按照协议的标准生成，拥有四个协议的语义模块
+     *
+     * @param protocolStruct    结构体
+     * @return                  编码结果
+     * @throws EncoderException 编码异常
+     */
     @Override
-    public String codec(ProtocolStruct protocolStruct) throws EncoderException {
+    public String encode(ProtocolStruct protocolStruct) throws EncoderException {
         Log.d(protocolStruct.toString());
         protocolStruct.escapeAll();
         String tmp="";
         tmp+= ProtocolStruct.getMarkupHead(ProtocolStruct.protocolRound);
         tmp+= ProtocolStruct.getMarkupHead(ProtocolStruct.headerRound);
-        if(protocolStruct.getHeader()==null|| protocolStruct.getHeader().length()<=2)
-            throw new EncoderException("header is null or header is so short");
+        if(protocolStruct.getHeader()==null|| protocolStruct.getHeader().length()<=ProtocolStruct.headerAtLeastLength)
+            throw new EncoderException("header is null or header is so short",protocolStruct);
         tmp+= protocolStruct.getHeader();
         tmp+= ProtocolStruct.getMarkupTail(ProtocolStruct.headerRound);
         tmp+= ProtocolStruct.getMarkupHead(ProtocolStruct.deviceRound);
@@ -45,8 +53,18 @@ public abstract class AbstractEncoder implements Encoder{
         return tmp;
     }
 
+    /**
+     * 解码器
+     * 根据文本的标记符号语言进行拆分，生成协议体对象
+     * 根据协议要求只能有单独的语义协议块（四个语义块分别只能出现一次）
+     * 如果多次出现会抛出协议体异常
+     *
+     * @param msg                   可以转化为协议体的文本
+     * @return                      生成协议体对象
+     * @throws EncoderException     编码错误
+     */
     @Override
-    public ProtocolStruct encode(String msg) throws EncoderException {
+    public ProtocolStruct decode(String msg) throws EncoderException {
         String[] singleArray=new String[4];
         String[] tagArray=new String[]{
                 ProtocolStruct.headerRound,
@@ -73,12 +91,12 @@ public abstract class AbstractEncoder implements Encoder{
     }
 
     /**
-     * 该方法来配合{@link AbstractEncoder#unpackMarkup(String, String)}
+     * 该方法来配合{@link EncoderImpl#unpackMarkup(String, String)}
      * 检查该标记是不是整段文本中唯一的标记
      * 如果信息原文组的长度是一则说明只有一个对象（根据上面方法定义）
      * 为当前的协议版本需求
      *
-     * 写这个方法主要是避免在{@link AbstractEncoder#encode(String)}
+     * 写这个方法主要是避免在{@link EncoderImpl#decode(String)}
      * 循环调用时候产生的代码重复
      *
      * @param msg               信息原文组
@@ -97,6 +115,7 @@ public abstract class AbstractEncoder implements Encoder{
      * 如 <p>hello-world</p>outside<p>hello-world</p>
      * 返回 String["hello-world","hello-world"]
      *
+     * @author      S
      * @param msg   携带标记符号的原文
      * @param tag   要解套的标记符号
      * @return      解套后的文本数组
@@ -104,8 +123,8 @@ public abstract class AbstractEncoder implements Encoder{
     public String[] unpackMarkup(String msg,String tag){
         int h,t,vis=0;
         LinkedList<String> list=new LinkedList<>();
-        String head="<"+tag+">";
-        String tail="</"+tag+">";
+        String head=ProtocolStruct.getMarkupHead(tag);
+        String tail=ProtocolStruct.getMarkupTail(tag);
         while((vis=msg.indexOf(head, vis))!=-1){
             h=vis+head.length();
             if((vis=msg.indexOf(tail, vis))!=-1){

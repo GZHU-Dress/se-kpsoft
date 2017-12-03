@@ -6,7 +6,9 @@ import java.util.Arrays;
 
 /**
  * 该类里定义了协议体，包含固定的几个大框架的调用
+ * 包括首部行、设备行、指令行和数据行
  * 还有具体的内容调用交由实现来的实现
+ *
  * Created by zyvis on 2017/11/29.
  */
 public class ProtocolStruct {
@@ -16,12 +18,13 @@ public class ProtocolStruct {
     private String[] data;
     public final static String protocolRound="kp";
     public final static String headerRound="h";
+    public final static int headerAtLeastLength=2;
     public final static String deviceRound="v";
     public final static String instructionRound="i";
     public final static String dataRound="d";
     public final static String dataMiniRound="";
     public final static String escapeChar="/o";
-    public final static String[] changeChar=new String[]{"<",">","/"};
+    public final static String[] changeChar=new String[]{"<",">","/",";"};
 
     public String getHeader() {
         return header;
@@ -47,9 +50,24 @@ public class ProtocolStruct {
         nullToBlank();
     }
 
+    /**
+     * 生成标记头
+     * 如 p -> <p>
+     *
+     * @param markup    标记符号
+     * @return          标记符号头
+     */
     public static String getMarkupHead(String markup){
         return "<"+markup+">";
     }
+
+    /**
+     * 生成标记尾
+     * 如 p -> </p>
+     *
+     * @param markup    标记符号
+     * @return          标记符号尾
+     */
     public static String getMarkupTail(String markup){
         return "</"+markup+">";
     }
@@ -106,7 +124,12 @@ public class ProtocolStruct {
                 " ]"+'}';
     }
 
-    public void nullToBlank(){
+    /**
+     * 在创建时候调用该方法，
+     * 检查所有String对象是否为null，
+     * 是的话就补成空语句
+     */
+    private void nullToBlank(){
         if(header==null)header="";
         if(device==null)device="";
         if(instruction==null)instruction="";
