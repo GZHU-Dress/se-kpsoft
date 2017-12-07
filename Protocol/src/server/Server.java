@@ -1,26 +1,28 @@
 package server;
 
+import log.Log;
+
 import java.io.*;
 import java.net.*;
 public class Server implements WebSocketMod{
 	/**
-	*端口号为PORT
+	*端口号为serverPort
 	*/
 	private int serverPort;
 	/**
 	*处理连接和读取数据的ClientLink
 	*/
-	private ClientLink cl;
+	private ClientLink clientLink;
 
 	@Override
 	public void setup(int port) throws WebsocketException {
 		this.serverPort =port;
-		cl=new ClientLink();
+		clientLink =new ClientLink();
 	}
 
 	@Override
 	public boolean hasNextLine() {
-		return cl.empty();
+		return !clientLink.isEmpty();
 	}
 
 	/**
@@ -28,7 +30,7 @@ public class Server implements WebSocketMod{
 	 */
 	@Override
 	public String readNextLine() throws WebsocketException {
-		return cl.getmessage();
+		return clientLink.getMessage();
 	}
 	/**
 	 *将要发送的信息封装，再发送给客户端数据
@@ -36,7 +38,7 @@ public class Server implements WebSocketMod{
 	@Override
 	public void send(String msg) throws WebsocketException {
 		byte[] ms=Alzdata.packdata(msg);
-		cl.send(ms);
+		clientLink.send(ms);
 	}
 
 	/**
@@ -49,21 +51,18 @@ public class Server implements WebSocketMod{
 	*启动服务器
 	*/
 	@Override
-	public void run(){
+	public Boolean call()throws WebsocketException{
 		try{
 			ServerSocket server=new ServerSocket(serverPort,1);
-			System.out.println("server start");
+            Log.v("server start");
 			while(true){
 				Socket socket=server.accept();
-				cl=new ClientLink(socket);
-				cl.run();
+				clientLink =new ClientLink(socket);
+				clientLink.run();
 			}
 		}
 		catch(IOException e){
-			return;
-		}
-		catch(WebsocketException e){
-			return;
+			throw new WebsocketException("fail in open the accepted socket");
 		}
 	}
 
@@ -72,13 +71,8 @@ public class Server implements WebSocketMod{
 	*/
 	@Override
 	public void close() throws WebsocketException{
-		cl.onclose();
+		clientLink.onclose();
 	}
-	/**
-	*开启接收客户端数据
-	*/
-	/*public void onread()throws IOException{
-		cl.onread();
-	}*/
+
 }
 

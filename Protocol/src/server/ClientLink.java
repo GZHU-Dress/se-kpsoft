@@ -10,17 +10,16 @@ public class ClientLink{
 	/**
 	*socket为tcp连接成功的socket
 	*/
-	private Socket socket;
+	private Socket socket=null;
 	/**
 	*应用层数据队列
 	*/
-	private Queue<String> q; 
+	private Queue<String> stringQueue;
 	/**
 	*初始化队列
 	*/
 	public ClientLink(){
-		q=new LinkedList<>();
-		socket=null;
+		stringQueue =new LinkedList<>();
 	}
 	/**
 	*检测key并把key提取后加上规定字符串
@@ -44,14 +43,14 @@ public class ClientLink{
 	/**
 	*构造函数初始化socket
 	*/
-	public ClientLink(Socket s){
-		socket=s;
-		q=new LinkedList<>();
+	public ClientLink(Socket socket){
+		this.socket =socket;
+		stringQueue =new LinkedList<>();
 	}
 	/**
 	*获取socket
 	*/
-	public Socket getsocket(){
+	public Socket getSocket(){
 		return socket;
 	}
 	/**
@@ -66,11 +65,10 @@ public class ClientLink{
 				length=is.read(by);
 				if(length==0){continue;}
 				System.out.println(length);
-				Framedata fd=(new Alzdata()).analizedata(by);
-				fd.output();
-				if(fd.getframetype()==8)
+				Framedata fd=Alzdata.analizedata(by);
+				if(fd.getFrametype()==8)
 					break;
-				q.offer(fd.getpayloaddata());
+				stringQueue.offer(fd.getPayloaddata());
 			}
 			send(by);
 			socket.close();
@@ -79,7 +77,6 @@ public class ClientLink{
 			throw new WebsocketException("can not open socket inputstream");
 		}
 		catch(NullPointerException e1){
-			e1.printStackTrace();
 			throw new WebsocketException("socket is null");
 		}
 		socket=null;
@@ -107,18 +104,21 @@ public class ClientLink{
 	/**
 	*从消息队列中返回信息
 	*/
-	public String getmessage(){
-		return q.poll();
+	public String getMessage(){
+		return stringQueue.poll();
 	}
 	/**
 	*判断消息队列是否为空
 	*/
-	public boolean empty(){
-		return q.peek()==null;
+	public boolean isEmpty(){
+		return stringQueue.peek()==null;
 	}
 	/**
-	*发送信息给客户端,message为服务端封装好的字节信息
-	*/
+	 * 发送信息给客户端,message为服务端封装好的字节信息
+	 *
+	 * @param message				要发送的信息
+	 * @throws WebsocketException	空指针或IO异常的抛出
+	 */
 	public void send(byte[] message) throws WebsocketException{
 		try{
 			(socket.getOutputStream()).write(message);
@@ -131,7 +131,8 @@ public class ClientLink{
 		}
 	}
 	/**
-	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
+	*开启线程后会接受websocket握手信息，然后再从信息中分离出key，
+	 * 再对key进行sha-1 hash后再base64加密,最后把信息返回给客户端检验
 	*/
 	public void run() throws WebsocketException{
 		try{
@@ -148,7 +149,6 @@ public class ClientLink{
 					res=getBase64(hash);
 				}
 			}
-			System.out.println(res);
 			BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             bw.write("HTTP/1.1 101 Web Socket Protocol Handshake\r\n");
             bw.write("Upgrade: websocket\r\n");
@@ -158,13 +158,13 @@ public class ClientLink{
 			onread();
 		}
 		catch(UnsupportedEncodingException e1){
-			throw new WebsocketException("encoding error");
+			throw new WebsocketException("encoding error , key is not in law",e1);
 		}
 		catch(IOException e2){
 			throw new WebsocketException("open socket inputstream error");
 		}
 		catch(NoSuchAlgorithmException e3){
-			throw new WebsocketException("no such algorighm");
+			throw new WebsocketException("no such algorighm",e3);
 		}
 	}
 }

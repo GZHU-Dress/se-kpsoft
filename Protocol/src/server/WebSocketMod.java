@@ -1,6 +1,7 @@
 package server;
 
 import java.net.ServerSocket;
+import java.util.concurrent.Callable;
 
 /**
  * 此类为WebSocket模块
@@ -8,7 +9,7 @@ import java.net.ServerSocket;
  *
  * Created by zyvis on 2017/11/30.
  */
-public interface WebSocketMod extends Runnable{
+public interface WebSocketMod extends Callable{
     /**
      * 这个方法里指定一个用于监听的端口，由该模块实现
      * 当创建失败的时候抛出WebSocketException异常
@@ -47,11 +48,9 @@ public interface WebSocketMod extends Runnable{
 
     /**
      * 调用该方法进行信息传送
-     * 该模块中存在指令缓冲区，可以调用是否直接传输出去
      *
      * @param msg                   传送的信息
-     * @param sendNow               标识其是否立即传输
      * @throws WebsocketException   当发送信息发生问题时候抛出异常
      */
-    void send(String msg,boolean sendNow) throws WebsocketException;
+    void send(String msg) throws WebsocketException;
 }

@@ -21,48 +21,56 @@ public class Framedata{
 	*应用层数据
 	*/
 	private String payloaddata;
+
+
 	public Framedata(){
 		fin=false;
 		frametype=pllength=0;
 		mask=false;
 		payloaddata="";
 	}
-	public void setfin(boolean f){
-		fin=f;
-	}
-	public void setframetype(int ft){
-		frametype=ft;
-	}
-	public void setmask(boolean m){
-		mask=m;
-	}
-	public void setpllength(int pllen){
-		pllength=pllen;
-	}
-	public void setpayloaddata(String pl){
-		payloaddata=pl;
-	}
-	public boolean getfin(){
+
+	public boolean isFin() {
 		return fin;
 	}
-	public int getframetype(){
+
+	public void setFin(boolean fin) {
+		this.fin = fin;
+	}
+
+	public int getFrametype() {
 		return frametype;
 	}
-	public boolean getmask(){
+
+	public void setFrametype(int frametype) {
+		this.frametype = frametype;
+	}
+
+	public boolean isMask() {
 		return mask;
 	}
-	public int getpllength(){
+
+	public void setMask(boolean mask) {
+		this.mask = mask;
+	}
+
+	public int getPllength() {
 		return pllength;
 	}
-	public String getpayloaddata(){
+
+	public void setPllength(int pllength) {
+		this.pllength = pllength;
+	}
+
+	public String getPayloaddata() {
 		return payloaddata;
 	}
-	public void output(){
-		System.out.println("fin="+fin);
-		System.out.println("frametype="+frametype);
-		System.out.println("mask="+mask);
-		System.out.println("pllength="+pllength);
-		System.out.println("payloaddata="+payloaddata);
+
+	public void setPayloaddata(String payloaddata) {
+		this.payloaddata = payloaddata;
 	}
+
+
+
 }
 
