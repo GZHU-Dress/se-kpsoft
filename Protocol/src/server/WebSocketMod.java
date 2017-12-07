@@ -8,7 +8,7 @@ import java.net.ServerSocket;
  *
  * Created by zyvis on 2017/11/30.
  */
-public interface WebSocketMod {
+public interface WebSocketMod extends Runnable{
     /**
      * 这个方法里指定一个用于监听的端口，由该模块实现
      * 当创建失败的时候抛出WebSocketException异常
@@ -16,16 +16,16 @@ public interface WebSocketMod {
      * 初步版本：每一个WebSocket模块只包含对一个端口的监听
      *
      * @param port                  要监听的端口
-     * @throws WebSocketException   无法正确建立监听端口等异常抛出
+     * @throws WebsocketException   无法正确建立监听端口等异常抛出
      */
-    void setup(int port) throws WebSocketException;
+    void setup(int port) throws WebsocketException;
 
     /**
      * 该方法尝试断开并关闭socket连接
      *
-     * @throws WebSocketException   无法正常关闭时抛出异常
+     * @throws WebsocketException   无法正常关闭时抛出异常
      */
-    void close() throws WebSocketException;
+    void close() throws WebsocketException;
 
     /**
      * 询问是否有下一条指令的存在
@@ -41,9 +41,9 @@ public interface WebSocketMod {
      * 在轮询出现结果的时候调用该方法获取新的消息
      *
      * @return                      新的信息
-     * @throws WebSocketException   当无法被读取或其他异常发生时抛出
+     * @throws WebsocketException   当无法被读取或其他异常发生时抛出
      */
-    String readNextLine()throws WebSocketException;
+    String readNextLine()throws WebsocketException;
 
     /**
      * 调用该方法进行信息传送
@@ -51,7 +51,7 @@ public interface WebSocketMod {
      *
      * @param msg                   传送的信息
      * @param sendNow               标识其是否立即传输
-     * @throws WebSocketException   当发送信息发生问题时候抛出异常
+     * @throws WebsocketException   当发送信息发生问题时候抛出异常
      */
-    void send(String msg,boolean sendNow) throws WebSocketException;
+    void send(String msg,boolean sendNow) throws WebsocketException;
 }
