@@ -52,8 +52,13 @@ public class Server implements WebSocketMod{
 	*/
 	@Override
 	public Boolean call()throws WebsocketException{
-		try{
-			ServerSocket server=new ServerSocket(serverPort,1);
+        ServerSocket server= null;
+        try {
+            server = new ServerSocket(serverPort,1);
+        } catch (IOException e) {
+            throw new WebsocketException("server socket build failed : the port is busy");
+        }
+        try{
             Log.v("server start");
 			while(true){
 				Socket socket=server.accept();
@@ -63,7 +68,10 @@ public class Server implements WebSocketMod{
 		}
 		catch(IOException e){
 			throw new WebsocketException("fail in open the accepted socket");
+		}catch (WebsocketException e1){
+			Log.v(e1);
 		}
+		return true;
 	}
 
 	/**

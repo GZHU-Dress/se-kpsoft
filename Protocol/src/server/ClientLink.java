@@ -3,6 +3,8 @@ package server;
 import java.io.*;
 import java.net.*;
 import java.security.*;
+
+import log.Log;
 import sun.misc.*;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -64,8 +66,8 @@ public class ClientLink{
 			while(true){
 				length=is.read(by);
 				if(length==0){continue;}
-				System.out.println(length);
 				Framedata fd=Alzdata.analizedata(by);
+				Log.v(fd);
 				if(fd.getFrametype()==8)
 					break;
 				stringQueue.offer(fd.getPayloaddata());
@@ -140,7 +142,7 @@ public class ClientLink{
 			String line=null;
 			String res=null;
 			while(!(line=br.readLine()).equals("")){
-				System.out.println(line);
+
 				String key=check(line);
 				if(key!=null){
 					MessageDigest sha1=MessageDigest.getInstance("sha-1");
@@ -149,6 +151,7 @@ public class ClientLink{
 					res=getBase64(hash);
 				}
 			}
+			Log.v("accept link in data : web socket has build");
 			BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             bw.write("HTTP/1.1 101 Web Socket Protocol Handshake\r\n");
             bw.write("Upgrade: websocket\r\n");

@@ -70,7 +70,15 @@ public class Framedata{
 		this.payloaddata = payloaddata;
 	}
 
-
-
+	@Override
+	public String toString() {
+		return "Framedata{" +
+				"fin=" + fin +
+				", frametype=" + frametype +
+				", mask=" + mask +
+				", pllength=" + pllength +
+				", payloaddata='" + payloaddata + '\'' +
+				'}';
+	}
 }
 

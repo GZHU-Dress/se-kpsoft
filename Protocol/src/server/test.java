@@ -12,10 +12,13 @@ public class test {
         WebSocketMod webSocketMod=new Server();
 
         try {
-            webSocketMod.setup(10088);
+            webSocketMod.setup(10086);
+            webSocketMod.call();
             Log.d("webSocketMod install");
         } catch (WebsocketException e) {
             Log.e(e.getMessage(),e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
