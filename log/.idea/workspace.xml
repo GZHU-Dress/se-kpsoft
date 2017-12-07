@@ -70,8 +70,8 @@
       <file leaf-file-name="Log.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/log/Log.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1080">
-              <caret line="187" column="36" lean-forward="false" selection-start-line="187" selection-start-column="27" selection-end-line="187" selection-end-column="36" />
+            <state relative-caret-position="100">
+              <caret line="268" column="26" lean-forward="true" selection-start-line="268" selection-start-column="25" selection-end-line="268" selection-end-column="26" />
               <folding>
                 <element signature="method#d#0;class#Log#0" expanded="false" />
                 <element signature="method#d#3;class#Log#0" expanded="false" />
@@ -154,8 +154,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="768" />
-    <option name="y" value="133" />
+    <option name="x" value="806" />
+    <option name="y" value="177" />
     <option name="width" value="1269" />
     <option name="height" value="762" />
   </component>
@@ -493,7 +493,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="768" y="133" width="1269" height="762" extended-state="0" />
+    <frame x="806" y="177" width="1269" height="762" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -958,8 +958,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/log/Log.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1080">
-          <caret line="187" column="36" lean-forward="false" selection-start-line="187" selection-start-column="27" selection-end-line="187" selection-end-column="36" />
+        <state relative-caret-position="100">
+          <caret line="268" column="26" lean-forward="true" selection-start-line="268" selection-start-column="25" selection-end-line="268" selection-end-column="26" />
           <folding>
             <element signature="method#d#0;class#Log#0" expanded="false" />
             <element signature="method#d#3;class#Log#0" expanded="false" />
