@@ -44,6 +44,7 @@ public class ClientLink{
 	*/
 	public ClientLink(Socket s){
 		socket=s;
+		q=new LinkedList<String>();
 	}
 	/**
 	*获取socket
@@ -60,9 +61,9 @@ public class ClientLink{
 			int length=-1;
 			byte[] by=new byte[10005];
 			while(true){
-				if(socket==null)
-					return;
 				length=is.read(by);
+				if(length==0)
+					continue;
 				System.out.println(length);
 				Framedata fd=(new Alzdata()).analizedata(by);
 				fd.output();
@@ -72,14 +73,15 @@ public class ClientLink{
 			}
 			send(by);
 			socket.close();
-			socket=null;
 		}
 		catch(IOException e){
 			throw new WebsocketException("can not open socket inputstream");
 		}
 		catch(NullPointerException e1){
+			e1.printStackTrace();
 			throw new WebsocketException("socket is null");
 		}
+		socket=null;
 	}
 	/**
 	*关闭连接
