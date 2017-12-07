@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>WebSocket client</title>
+</head>
+
+<body>
+<div>
+    <input type="button" id="btnConnection" value="link" onclick="click1()"/>
+    <input type="button" id="btnSend" value="send" onclick="click2()" />
+    <input type="button" id="btnClose" value="close" onclick="click3()"/>
+</div>
+<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" >
+    var socket;
+    if(typeof(WebSocket) == "undefined") {
+        alert("WebSocket not supported");
+    }
+
+    function click1() {
+        socket = new WebSocket("ws://127.0.0.1:10086");
+        socket.onopen = function() {
+            alert("Socket is opened");
+        };
+        socket.onmessage = function(msg) {
+            alert(msg.data);
+        };
+        socket.onclose = function() {
+            alert("Socket is close");
+        };
+        socket.onerror = function(ev) {
+            alert("error curred: ");
+        }
+    };
+
+    function click2() {
+        socket.send("msg from client");
+    };
+
+    //关闭
+    function click3() {
+        socket.close();
+    }
+
+</script>
+</body>
+
+</html>
