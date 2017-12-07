@@ -20,7 +20,7 @@ public class Server implements WebSocketMod{
 
 	@Override
 	public boolean hasNextLine() {
-		return false;
+		return cl.empty();
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class Server implements WebSocketMod{
 	 *将要发送的信息封装，再发送给客户端数据
 	 */
 	@Override
-	public void send(String msg, boolean sendNow) throws WebsocketException {
+	public void send(String msg) throws WebsocketException {
 		byte[] ms=Alzdata.packdata(msg);
 		cl.send(ms);
 	}
@@ -67,16 +67,6 @@ public class Server implements WebSocketMod{
 		}
 	}
 
-	/**
-	*判断消息队列是否为空
-	*/
-	public boolean empty(){
-		return cl.empty();
-	}
-
-	public void send(String message) throws WebsocketException{
-
-	}
 	/**
 	*关闭socket当前socket连接
 	*/
