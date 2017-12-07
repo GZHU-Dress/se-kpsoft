@@ -24,7 +24,7 @@ public class ProtocolStruct {
     public final static String dataRound="d";
     public final static String dataMiniRound="";
     public final static String escapeChar="/o";
-    public final static String[] changeChar=new String[]{"<",">","/",";"};
+    public final static String[] changeChar=new String[]{};
 
     public String getHeader() {
         return header;

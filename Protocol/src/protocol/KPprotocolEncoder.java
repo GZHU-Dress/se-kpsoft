@@ -1,6 +1,6 @@
 package protocol;
 
-public class KPprotocolEncoder{
+public class KPprotocolEncoder implements InstructEncoder{
 
     private EncoderImpl encoder;
 
