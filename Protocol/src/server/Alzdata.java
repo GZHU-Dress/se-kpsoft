@@ -7,19 +7,19 @@ public class Alzdata{
 	public static byte[] packdata(String message){
 	    byte[] content=null;
 	    byte[] temp=message.getBytes();
-	    if(message.length()<126){
-	        content=new byte[message.length()+2];
+	    if(temp.length<126){
+	        content=new byte[temp.length+2];
 	        content[0]=(byte)(0x81);
-	        content[1]=(byte)message.length();
-	        System.arraycopy(temp,0,content,2,message.length());
+	        content[1]=(byte)temp.length;
+	        System.arraycopy(temp,0,content,2,temp.length);
 	    }
 	    else if(message.length()<0xFFFF){
-	        content=new byte[message.length()+4];
+	        content=new byte[temp.length+4];
 	        content[0]=(byte)(0x81);
 	        content[1]=(byte)126;
-	        content[3]=(byte)(message.length()&0xFF);
-	        content[2]=(byte)(message.length()>>8&0xFF);
-	        System.arraycopy(temp,0,content,4,message.length());
+	        content[3]=(byte)(temp.length&0xFF);
+	        content[2]=(byte)(temp.length>>8&0xFF);
+	        System.arraycopy(temp,0,content,4,temp.length);
 	    }
 	    else{
 	        //暂时不做处理	

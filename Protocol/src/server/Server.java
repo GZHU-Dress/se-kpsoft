@@ -4,7 +4,7 @@ import log.Log;
 
 import java.io.*;
 import java.net.*;
-public class Server implements HeartbeatWebSocketMod{
+public class Server implements WebSocketMod{
 	/**
 	*端口号为serverPort
 	*/
@@ -12,7 +12,7 @@ public class Server implements HeartbeatWebSocketMod{
 	/**
 	*处理连接和读取数据的ClientLink
 	*/
-	private ClientLink clientLink;
+	private volatile ClientLink clientLink;
 
 	@Override
 	public void setup(int port) throws WebsocketException {
