@@ -1,5 +1,7 @@
 package server;
 
+import log.Core;
+import log.Log;
 public class Alzdata{
 	/**
 	*服务器封装数据,返回封装后的数据
@@ -7,19 +9,19 @@ public class Alzdata{
 	public static byte[] packdata(String message){
 	    byte[] content=null;
 	    byte[] temp=message.getBytes();
-	    if(message.length()<126){
-	        content=new byte[message.length()+2];
+	    if(temp.length<126){
+	        content=new byte[temp.length+2];
 	        content[0]=(byte)(0x81);
-	        content[1]=(byte)message.length();
-	        System.arraycopy(temp,0,content,2,message.length());
+	        content[1]=(byte)temp.length;
+	        System.arraycopy(temp,0,content,2,temp.length);
 	    }
 	    else if(message.length()<0xFFFF){
-	        content=new byte[message.length()+4];
+	        content=new byte[temp.length+4];
 	        content[0]=(byte)(0x81);
 	        content[1]=(byte)126;
-	        content[3]=(byte)(message.length()&0xFF);
-	        content[2]=(byte)(message.length()>>8&0xFF);
-	        System.arraycopy(temp,0,content,4,message.length());
+	        content[3]=(byte)(temp.length&0xFF);
+	        content[2]=(byte)(temp.length>>8&0xFF);
+	        System.arraycopy(temp,0,content,4,temp.length);
 	    }
 	    else{
 	        //暂时不做处理	
@@ -54,13 +56,14 @@ public class Alzdata{
 		if(length<=125)
 			solve(by,fd,2,length);
 		else if(length==126){
-			length=by[2]<<8|by[3];
+			length=by[2]&0xFF;
+			length=length<<8|(by[3]&0xFF);
 			solve(by,fd,4,length);
 		}
 		else{
 			length=0;
 			for(int i=2;i<10;i++)
-				length=length<<8|by[i];
+				length=length<<8|(by[i]&0xFF);
 			solve(by,fd,10,length);
 		}
 		return fd;

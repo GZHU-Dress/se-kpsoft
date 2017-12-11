@@ -62,9 +62,10 @@ public class ClientLink{
 		try{
 			InputStream is=socket.getInputStream();
 			int length=-1;
-			byte[] by=new byte[10005];
+			byte[] by=new byte[100005];
 			while(true){
 				length=is.read(by);
+				//Log.d(length);
 				if(length==0){continue;}
 				Framedata fd=Alzdata.analizedata(by);
 				Log.v(fd);
